@@ -1,0 +1,20 @@
+[
+  {
+    "fullName": "microsoft/vscode",
+    "description": "Visual Studio Code is a lightweight but powerful source code editor.",
+    "url": "https://github.com/microsoft/vscode",
+    "starredAt": "2025-03-14"
+  },
+  {
+    "fullName": "facebook/react",
+    "description": "A JavaScript library for building user interfaces.",
+    "url": "https://github.com/facebook/react",
+    "starredAt": "2025-02-20"
+  },
+  {
+    "fullName": "torvalds/linux",
+    "description": "The Linux kernel source tree.",
+    "url": "https://github.com/torvalds/linux",
+    "starredAt": "2025-01-08"
+  }
+]
