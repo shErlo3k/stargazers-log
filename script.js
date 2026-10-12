@@ -1,6 +1,27 @@
 const status = document.querySelector("#status");
 const repositoryList = document.querySelector("#repository-list");
 
+function isRepository(repository) {
+  if (
+    repository === null ||
+    typeof repository !== "object" ||
+    Array.isArray(repository) ||
+    typeof repository.fullName !== "string" ||
+    typeof repository.description !== "string" ||
+    typeof repository.url !== "string" ||
+    typeof repository.starredAt !== "string"
+  ) {
+    return false;
+  }
+
+  try {
+    const url = new URL(repository.url);
+    return url.protocol === "https:" || url.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
 function createRepositoryCard(repository) {
   const item = document.createElement("li");
   item.className = "repository-card";
@@ -37,10 +58,22 @@ async function loadRepositories() {
       throw new Error("Repository data must be a list");
     }
 
-    repositoryList.replaceChildren(...repositories.map(createRepositoryCard));
-    status.textContent = repositories.length
-      ? ""
-      : "No starred repositories to show yet.";
+    const validRepositories = repositories.filter(isRepository);
+    const invalidCount = repositories.length - validRepositories.length;
+    if (invalidCount > 0) {
+      console.error(`${invalidCount} invalid repository entr${invalidCount === 1 ? "y was" : "ies were"} skipped.`);
+    }
+
+    repositoryList.replaceChildren(...validRepositories.map(createRepositoryCard));
+    if (invalidCount > 0) {
+      status.textContent = validRepositories.length > 0
+        ? "Some repositories could not be displayed."
+        : "Repository data contains no valid entries.";
+    } else {
+      status.textContent = validRepositories.length > 0
+        ? ""
+        : "No starred repositories to show yet.";
+    }
   } catch (error) {
     console.error("Unable to load starred repositories:", error);
     status.textContent = "Repositories could not be loaded. Please try again later.";
